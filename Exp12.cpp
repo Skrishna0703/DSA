@@ -3,7 +3,7 @@
 #include<stdio.h>
 using namespace std;
 class Employee {
-private:
+public:
  int code;
  char name[20];
  float salary;
@@ -23,17 +23,18 @@ void Employee::read() {
  cout << "Enter salary: ";
  cin >> salary;
 }
-void Employee::display() {
- cout << code << " " << name << "\t" << salary << endl;
+void Employee::display() 
+{
+ cout << &code<< " " << &name << "\t" << &salary << endl;
 }
 fstream file;
 void deleteExistingFile() {
- remove("EMPLOYEE.DAT");
+ remove("EMPLOYEE.txt");
 }
 void appendToFile() {
  Employee x;
  x.read();
- file.open("EMPLOYEE.DAT", ios::binary|ios::app);
+ file.open("EMPLOYEE.txt", ios::binary|ios::app);
  if (!file) {
  cout << "ERROR IN CREATING FILE\n";
  return;
@@ -43,17 +44,21 @@ void appendToFile() {
  cout << "Record added successfully.\n";
 }
 void displayAll() {
- Employee x;
- file.open("EMPLOYEE.DAT", ios::binary|ios::in);
- if (!file) {
- cout << "ERROR IN OPENING FILE \n";
- return;
- }
- while (file.read((char*)&x, sizeof(x))) {
- if (x.getSalary() >= 100000 && x.getSalary() <= 400000)
- x.display();
- }
- file.close();
+std::ifstream file("EMPLOYEE.txt");
+
+    if (!file.is_open()) {
+        std::cerr << "Failed to open the file." << std::endl;
+       
+    }
+
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::cout << line << std::endl;
+    }
+
+    file.close(); 
+
 }
 void searchForRecord() {
  Employee x;
@@ -61,7 +66,7 @@ void searchForRecord() {
  int isFound = 0;
  cout << "Enter employee code: ";
  cin >> c;
- file.open("EMPLOYEE.DAT", ios::binary|ios::in);
+ file.open("EMPLOYEE.txt", ios::binary|ios::in);
  if (!file) {
  cout << "ERROR IN OPENING FILE \n";
  return;
